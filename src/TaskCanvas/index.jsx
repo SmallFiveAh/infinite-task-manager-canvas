@@ -354,13 +354,15 @@ function TaskCanvas() {
       />
       {/* HUD 组件 */}
       <div
-        className="infinite-canvas-hud" 
-        onClick={handleResetZoom} 
-        onKeyDown={handleHudKeyDown} 
-        role="button" tabIndex={0} 
-        title="点击恢复到 100%">
-          <i className="hud-icon bi bi-arrows-fullscreen" aria-hidden="true" />
-          <span className="hud-text">{(scale * 100).toFixed(0)}%</span>
+        className="infinite-canvas-hud"
+        onClick={handleResetZoom}
+        onKeyDown={handleHudKeyDown}
+        role="button" tabIndex={0}
+      >
+          <HoverText text="点击恢复到 100%">
+            <i className="hud-icon bi bi-arrows-fullscreen" aria-hidden="true" />
+            <span className="hud-text">{(scale * 100).toFixed(0)}%</span>
+          </HoverText>
       </div>
       {/* 任务存储组件：传入缩放百分比与回调，实现双向联动 */}
       <TaskStorage

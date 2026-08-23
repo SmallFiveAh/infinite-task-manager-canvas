@@ -41,9 +41,10 @@ function AboveSidebar({ zoomPercent = 100, onZoomChange, onZoomReset, activeTool
       <button
         className={`above-tool-item ${locked ? 'active' : ''}`}
         onClick={() => setLocked(!locked)}
-        title={locked ? '已锁定' : '锁定画布'}
       >
-        <i className={`bi ${locked ? 'bi-lock-fill' : 'bi-unlock'}`} />
+        <HoverText text={locked ? '已锁定' : '锁定画布'}>
+          <i className={`bi ${locked ? 'bi-lock-fill' : 'bi-unlock'}`} />
+        </HoverText>
       </button>
 
       <div className="above-divider" />
@@ -51,17 +52,19 @@ function AboveSidebar({ zoomPercent = 100, onZoomChange, onZoomReset, activeTool
       <button
         className={`above-tool-item ${activeTool === 'select' ? 'active' : ''}`}
         onClick={() => handleToolChange('select')}
-        title='选择(V)'
       >
-        <i className="bi bi-cursor-fill" />
+        <HoverText text='选择(V)'>
+          <i className="bi bi-cursor-fill" />
+        </HoverText>
       </button>
 
       <button
         className={`above-tool-item ${activeTool === 'navigate' ? 'active' : ''}`}
         onClick={() => handleToolChange('navigate')}
-        title='移动(H)'
       >
-        <i className="bi bi-hand-index-thumb-fill" />
+        <HoverText text='移动(H)'>
+          <i className="bi bi-hand-index-thumb-fill" />
+        </HoverText>
       </button>
 
       <div className="above-divider" />
@@ -69,18 +72,20 @@ function AboveSidebar({ zoomPercent = 100, onZoomChange, onZoomReset, activeTool
       <button
         className="above-tool-item"
         onClick={handleZoomOut}
-        title='缩小'
       >
-        <i className="bi bi-dash-lg" />
+        <HoverText text='缩小'>
+          <i className="bi bi-dash-lg" />
+        </HoverText>
       </button>
 
       <div className="above-zoom-wrapper" ref={hudMenuRef}>
         <div
           className={`above-zoom-label ${hudMenuOpen ? 'active' : ''}`}
           onClick={() => setHudMenuOpen(!hudMenuOpen)}
-          title="缩放比例"
         >
-          {zoomPercent}%
+          <HoverText text="缩放比例">
+            {zoomPercent}%
+          </HoverText>
         </div>
         {hudMenuOpen && (
           <div className="above-zoom-dropdown">
@@ -92,25 +97,28 @@ function AboveSidebar({ zoomPercent = 100, onZoomChange, onZoomReset, activeTool
       <button
         className="above-tool-item"
         onClick={handleZoomIn}
-        title='放大'
       >
-        <i className="bi bi-plus-lg" />
+        <HoverText text='放大'>
+          <i className="bi bi-plus-lg" />
+        </HoverText>
       </button>
 
       <div className="above-divider" />
 
       <button
         className="above-tool-item"
-        title='撤销(Z)'
       >
-        <i className="bi bi-arrow-counterclockwise" />
+        <HoverText text='撤销(Z)'>
+          <i className="bi bi-arrow-counterclockwise" />
+        </HoverText>
       </button>
 
       <button
         className="above-tool-item"
-        title='重做(Y)'
       >
-        <i className="bi bi-arrow-clockwise" />
+        <HoverText text='重做(Y)'>
+          <i className="bi bi-arrow-clockwise" />
+        </HoverText>
       </button>
     </div>
   )

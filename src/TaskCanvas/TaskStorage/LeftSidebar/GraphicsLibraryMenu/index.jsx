@@ -470,11 +470,12 @@ function ShapeCell({ item, selected, onClick }) {
     <button
       className={`glm-cell ${selected ? 'selected' : ''}`}
       onClick={onClick}
-      title={name}
     >
-      <svg viewBox="0 0 40 40" className="glm-cell-svg" aria-hidden="true">
-        <Comp />
-      </svg>
+      <HoverText text={name}>
+        <svg viewBox="0 0 40 40" className="glm-cell-svg" aria-hidden="true">
+          <Comp />
+        </svg>
+      </HoverText>
     </button>
   )
 }

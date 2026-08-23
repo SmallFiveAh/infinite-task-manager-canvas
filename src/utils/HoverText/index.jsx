@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import './index.css'
 
 const DIRECTION_MAP = {
@@ -50,16 +51,20 @@ function HoverText({
     if (!trigger || !tooltip) return
 
     const triggerRect = trigger.getBoundingClientRect()
-    const tooltipRect = tooltip.getBoundingClientRect()
+    // 用 offsetWidth/offsetHeight 取未变换前的真实尺寸，
+    // 避免 transform: scale(0.92) 影响 getBoundingClientRect 返回的宽高
+    const tooltipWidth = tooltip.offsetWidth || tooltip.getBoundingClientRect().width
+    const tooltipHeight = tooltip.offsetHeight || tooltip.getBoundingClientRect().height
 
-    let top = triggerRect.top - tooltipRect.height - 8
-    let left = triggerRect.left + triggerRect.width / 2
+    // 计算 tooltip 左上角的实际坐标（视口坐标系）
+    let top = triggerRect.top - tooltipHeight - 8
+    let left = triggerRect.left + triggerRect.width / 2 - tooltipWidth / 2
 
     // 防止超出视口
     if (top < 8) top = triggerRect.bottom + 8
-    if (left - tooltipRect.width / 2 < 8) left = tooltipRect.width / 2 + 8
-    if (left + tooltipRect.width / 2 > window.innerWidth - 8) {
-      left = window.innerWidth - tooltipRect.width / 2 - 8
+    if (left < 8) left = 8
+    if (left + tooltipWidth > window.innerWidth - 8) {
+      left = window.innerWidth - tooltipWidth - 8
     }
 
     setPosition({ top, left })
@@ -90,7 +95,7 @@ function HoverText({
       onMouseLeave={hide}
     >
       {children}
-      {visible && text && (
+      {visible && text && createPortal(
         <span
           ref={tooltipRef}
           className={`hover-text-tooltip ${directionClass} ${showing ? 'hover-text-show' : ''} ${tooltipClassName}`}
@@ -99,7 +104,8 @@ function HoverText({
           onMouseLeave={hide}
         >
           {text}
-        </span>
+        </span>,
+        document.body
       )}
     </span>
   )

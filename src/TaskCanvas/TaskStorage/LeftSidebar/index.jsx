@@ -49,14 +49,17 @@ function LeftSidebar({ onSelectShape }) {
               className={`sidebar-tool-item ${activeTool === tool.id ? 'active' : ''}`}
               style={{ '--tool-color': tool.color }}
               onClick={() => handleToolClick(tool.id)}
-              title={tool.label}
             >
-              <i className={`bi ${tool.icon}`} />
+              <HoverText text={tool.label}>
+                <i className={`bi ${tool.icon}`} />
+              </HoverText>
             </button>
           ))}
         </div>
-        <button className="sidebar-tool-item sidebar-tool-item--more" title="更多">
-          <i className="bi bi-three-dots" />
+        <button className="sidebar-tool-item sidebar-tool-item--more">
+          <HoverText text="更多">
+            <i className="bi bi-three-dots" />
+          </HoverText>
         </button>
       </div>
 
