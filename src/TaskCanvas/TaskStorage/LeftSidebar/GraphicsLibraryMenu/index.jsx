@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
 import './index.css'
 
 /* =========================================================
@@ -502,6 +502,136 @@ function SubGroup({ subGroup, selectedKey, onSelect }) {
 }
 
 /* =========================================================
+   自定义滚动条容器
+   - 完全隐藏原生滚动条（含箭头）
+   - 鼠标进入面板时显示自定义滚动条
+   - 拖动 thumb 也可滚动
+   ========================================================= */
+function CustomScrollContainer({ children, className }) {
+  const viewportRef = useRef(null)
+  const thumbRef = useRef(null)
+  const dragRef = useRef({ active: false, startY: 0, startScrollTop: 0 })
+  const [thumbVisible, setThumbVisible] = useState(false)
+  const [thumbStyle, setThumbStyle] = useState({ height: 0, top: 0 })
+
+  // 计算滚动条 thumb 的位置和大小
+  const updateThumb = useCallback(() => {
+    const el = viewportRef.current
+    if (!el) return
+    const { scrollTop, scrollHeight, clientHeight } = el
+    const trackHeight = clientHeight
+    const contentHeight = scrollHeight
+    if (contentHeight <= trackHeight) {
+      setThumbStyle((s) => ({ ...s, height: 0, top: 0 }))
+      return
+    }
+    const thumbHeight = Math.max(24, (trackHeight * trackHeight) / contentHeight)
+    const maxThumbTop = trackHeight - thumbHeight
+    const thumbTop = (scrollTop / (contentHeight - trackHeight)) * maxThumbTop
+    setThumbStyle({ height: thumbHeight, top: thumbTop })
+  }, [])
+
+  // 监听内容变化（折叠/展开）→ 重新计算
+  useEffect(() => {
+    const el = viewportRef.current
+    if (!el) return
+    const ro = new ResizeObserver(() => updateThumb())
+    ro.observe(el)
+    // 观察内容变化
+    Array.from(el.children).forEach((child) => ro.observe(child))
+    updateThumb()
+    return () => ro.disconnect()
+  }, [updateThumb])
+
+  // 拖动 thumb
+  const onThumbMouseDown = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    dragRef.current = {
+      active: true,
+      startY: e.clientY,
+      startScrollTop: viewportRef.current.scrollTop,
+    }
+    document.body.style.userSelect = 'none'
+  }
+
+  useEffect(() => {
+    const onMove = (e) => {
+      if (!dragRef.current.active) return
+      const el = viewportRef.current
+      if (!el) return
+      const { startY, startScrollTop } = dragRef.current
+      const trackHeight = el.clientHeight
+      const thumbHeight = Math.max(
+        24,
+        (trackHeight * trackHeight) / el.scrollHeight,
+      )
+      const maxThumbTop = trackHeight - thumbHeight
+      const deltaY = e.clientY - startY
+      const deltaScroll =
+        (deltaY / maxThumbTop) * (el.scrollHeight - el.clientHeight)
+      el.scrollTop = startScrollTop + deltaScroll
+    }
+    const onUp = () => {
+      if (dragRef.current.active) {
+        dragRef.current.active = false
+        document.body.style.userSelect = ''
+      }
+    }
+    window.addEventListener('mousemove', onMove)
+    window.addEventListener('mouseup', onUp)
+    return () => {
+      window.removeEventListener('mousemove', onMove)
+      window.removeEventListener('mouseup', onUp)
+    }
+  }, [])
+
+  // 点击轨道跳转
+  const onTrackMouseDown = (e) => {
+    if (e.target === thumbRef.current) return
+    const el = viewportRef.current
+    if (!el) return
+    const rect = e.currentTarget.getBoundingClientRect()
+    const clickY = e.clientY - rect.top
+    const thumbH = thumbStyle.height
+    const thumbT = thumbStyle.top
+    // 点击在 thumb 上方 → 上翻一页；下方 → 下翻一页
+    const pageDelta = clickY < thumbT ? -el.clientHeight : el.clientHeight
+    el.scrollTop += pageDelta
+  }
+
+  return (
+    <div
+      className={`glm-scroll-root ${className || ''}`}
+      onMouseEnter={() => setThumbVisible(true)}
+      onMouseLeave={() => setThumbVisible(false)}
+    >
+      <div
+        ref={viewportRef}
+        className="glm-scroll-viewport"
+        onScroll={updateThumb}
+      >
+        {children}
+      </div>
+      <div
+        className={`glm-scroll-track ${thumbVisible ? 'visible' : ''}`}
+        onMouseDown={onTrackMouseDown}
+      >
+        <div
+          ref={thumbRef}
+          className="glm-scroll-thumb"
+          style={{
+            height: thumbStyle.height,
+            transform: `translateY(${thumbStyle.top}px)`,
+          }}
+          onMouseDown={onThumbMouseDown}
+        />
+      </div>
+    </div>
+  )
+}
+
+/* =========================================================
    主组件
    ========================================================= */
 function GraphicsLibraryMenu({ onSelectShape }) {
@@ -513,7 +643,7 @@ function GraphicsLibraryMenu({ onSelectShape }) {
   }
 
   return (
-    <div className="graphics-library-menu">
+    <CustomScrollContainer className="graphics-library-menu">
       {categories.map((cat) => (
         <CollapsibleSection key={cat.key} title={cat.label}>
           {cat.subGroups.map((sg) => (
@@ -526,7 +656,7 @@ function GraphicsLibraryMenu({ onSelectShape }) {
           ))}
         </CollapsibleSection>
       ))}
-    </div>
+    </CustomScrollContainer>
   )
 }
 

@@ -2,14 +2,13 @@
    图形库菜单（GraphicsLibraryMenu）
    - 折叠式分类（流程图、基础图形）
    - 每个子分组：小标题 + 6 列 SVG 图形网格
+   - 自定义滚动条（不使用浏览器原生滚动条）
    ========================================================= */
 
 .graphics-library-menu {
-  width: 100%;
-  /* 放在 flex 容器 (.graphics-library-panel) 中，用 min-height:0 + flex-子项才能正确裁剪并触发滚动 */
+  /* 作为 .graphics-library-panel 的 flex 子项 */
   min-height: 0;
   flex: 1 1 auto;
-  overflow-y: auto;
   background: #ffffff;
   color: #1f2937;
   font-family:
@@ -17,22 +16,71 @@
     'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
   font-size: 13px;
   line-height: 1.4;
-  scrollbar-width: thin;
-  scrollbar-color: #cbd5e1 transparent;
+  position: relative;
 }
 
-.graphics-library-menu::-webkit-scrollbar {
-  width: 6px;
+/* 滚动容器根节点 */
+.glm-scroll-root {
+  position: relative;
+  height: 100%;
+  min-height: 0;
 }
-.graphics-library-menu::-webkit-scrollbar-thumb {
+
+/* 视口：真正滚动的容器；完全隐藏原生滚动条 */
+.glm-scroll-viewport {
+  height: 100%;
+  overflow-y: auto;
+  /* Firefox */
+  scrollbar-width: none;
+  /* IE/Edge */
+  -ms-overflow-style: none;
+}
+/* WebKit 隐藏原生滚动条（包括所有箭头按钮） */
+.glm-scroll-viewport::-webkit-scrollbar,
+.glm-scroll-viewport::-webkit-scrollbar-track,
+.glm-scroll-viewport::-webkit-scrollbar-thumb,
+.glm-scroll-viewport::-webkit-scrollbar-button,
+.glm-scroll-viewport::-webkit-scrollbar-button:start,
+.glm-scroll-viewport::-webkit-scrollbar-button:end,
+.glm-scroll-viewport::-webkit-scrollbar-button:vertical:start,
+.glm-scroll-viewport::-webkit-scrollbar-button:vertical:end {
+  display: none;
+  width: 0;
+  height: 0;
+  background: transparent;
+}
+
+/* 自定义滚动条轨道 */
+.glm-scroll-track {
+  position: absolute;
+  top: 0;
+  right: 2px;
+  bottom: 0;
+  width: 8px;
+  z-index: 5;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+.glm-scroll-track.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* 自定义滚动条 thumb */
+.glm-scroll-thumb {
+  position: absolute;
+  left: 1px;
+  right: 1px;
+  width: 6px;
   background: #cbd5e1;
   border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
 }
-.graphics-library-menu::-webkit-scrollbar-thumb:hover {
+.glm-scroll-thumb:hover,
+.glm-scroll-thumb:active {
   background: #94a3b8;
-}
-.graphics-library-menu::-webkit-scrollbar-track {
-  background: transparent;
 }
 
 /* ---------- 一级分类（可折叠） ---------- */
