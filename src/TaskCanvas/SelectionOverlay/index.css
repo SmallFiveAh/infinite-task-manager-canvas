@@ -10,7 +10,7 @@
 /* 切换到选择工具后才接管左键拖拽 */
 .selection-overlay.active {
   pointer-events: auto;
-  cursor: crosshair;
+  cursor: default;
 }
 
 /* 拖拽产生的矩形框 */
