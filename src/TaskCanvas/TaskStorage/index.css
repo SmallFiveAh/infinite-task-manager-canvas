@@ -15,8 +15,7 @@
   pointer-events: none;
 }
 
-/* 所有直接子元素（侧边栏 / HUD / 图形库面板）恢复交互 */
-.task-storage-container > *,
+/* 所有侧边栏 / HUD / 图形库面板（navbar 的直接子元素）恢复交互 */
 .task-storage-navbar > * {
   pointer-events: auto;
 }
