@@ -247,11 +247,10 @@ function TaskCanvas() {
   // 交互：wheel / pointer（所有 draw 替换为 scheduleDraw 合并到下一帧）
   useEffect(() => {
     const canvas = canvasRef.current
-    if (!canvas) return
+    const container = containerRef.current
+    if (!canvas || !container) return
 
     const onWheel = (e) => {
-      // 仅当左键按下时（含 shift+左键）才拦截滚轮做平移；中键完全忽略，交由浏览器默认行为处理
-      if (e.button !== 0) return
       e.preventDefault()
       const vp = viewportRef.current
       const delta = -e.deltaY * ZOOM_INTENSITY
@@ -259,7 +258,7 @@ function TaskCanvas() {
         MAX_SCALE,
         Math.max(MIN_SCALE, vp.scale * Math.exp(delta))
       )
-      const rect = canvas.getBoundingClientRect()
+      const rect = container.getBoundingClientRect()
       const px = e.clientX - rect.left
       const py = e.clientY - rect.top
       const k = newScale / vp.scale
@@ -297,14 +296,14 @@ function TaskCanvas() {
       }
     }
 
-    canvas.addEventListener('wheel', onWheel, { passive: false })
+    container.addEventListener('wheel', onWheel, { passive: false })
     canvas.addEventListener('pointerdown', onPointerDown)
     canvas.addEventListener('pointermove', onPointerMove)
     canvas.addEventListener('pointerup', onPointerUp)
     canvas.addEventListener('pointercancel', onPointerUp)
 
     return () => {
-      canvas.removeEventListener('wheel', onWheel)
+      container.removeEventListener('wheel', onWheel)
       canvas.removeEventListener('pointerdown', onPointerDown)
       canvas.removeEventListener('pointermove', onPointerMove)
       canvas.removeEventListener('pointerup', onPointerUp)
@@ -324,6 +323,7 @@ function TaskCanvas() {
         activeTool={activeTool}
         viewportRef={viewportRef}
         onSelectionEnd={handleSelectionEnd}
+        onRedraw={scheduleDraw}
       />
       {/* HUD 组件 */}
       <div
