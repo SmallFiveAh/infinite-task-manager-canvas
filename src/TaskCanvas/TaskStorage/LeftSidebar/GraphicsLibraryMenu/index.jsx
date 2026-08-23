@@ -509,34 +509,43 @@ function SubGroup({ subGroup, selectedKey, onSelect }) {
    ========================================================= */
 function CustomScrollContainer({ children, className }) {
   const viewportRef = useRef(null)
+  const trackRef = useRef(null)
   const thumbRef = useRef(null)
   const dragRef = useRef({ active: false, startY: 0, startScrollTop: 0 })
   const [thumbVisible, setThumbVisible] = useState(false)
   const [thumbStyle, setThumbStyle] = useState({ height: 0, top: 0 })
 
   // 计算滚动条 thumb 的位置和大小
+  // 注意：thumb 的尺寸和位置应基于 track 元素的真实高度（已扣除 CSS top/bottom 内缩），
+  // 而非视口高度，否则 CSS 中设置的 top/bottom 内缩对 thumb 不起作用
   const updateThumb = useCallback(() => {
     const el = viewportRef.current
-    if (!el) return
+    const trackEl = trackRef.current
+    if (!el || !trackEl) return
     const { scrollTop, scrollHeight, clientHeight } = el
-    const trackHeight = clientHeight
+    const trackHeight = trackEl.clientHeight
     const contentHeight = scrollHeight
-    if (contentHeight <= trackHeight) {
+    if (contentHeight <= clientHeight) {
       setThumbStyle((s) => ({ ...s, height: 0, top: 0 }))
       return
     }
-    const thumbHeight = Math.max(24, (trackHeight * trackHeight) / contentHeight)
+    const thumbHeight = Math.max(
+      24,
+      (clientHeight * trackHeight) / contentHeight,
+    )
     const maxThumbTop = trackHeight - thumbHeight
-    const thumbTop = (scrollTop / (contentHeight - trackHeight)) * maxThumbTop
+    const thumbTop = (scrollTop / (contentHeight - clientHeight)) * maxThumbTop
     setThumbStyle({ height: thumbHeight, top: thumbTop })
   }, [])
 
   // 监听内容变化（折叠/展开）→ 重新计算
   useEffect(() => {
     const el = viewportRef.current
-    if (!el) return
+    const trackEl = trackRef.current
+    if (!el || !trackEl) return
     const ro = new ResizeObserver(() => updateThumb())
     ro.observe(el)
+    ro.observe(trackEl)
     // 观察内容变化
     Array.from(el.children).forEach((child) => ro.observe(child))
     updateThumb()
@@ -559,12 +568,13 @@ function CustomScrollContainer({ children, className }) {
     const onMove = (e) => {
       if (!dragRef.current.active) return
       const el = viewportRef.current
-      if (!el) return
+      const trackEl = trackRef.current
+      if (!el || !trackEl) return
       const { startY, startScrollTop } = dragRef.current
-      const trackHeight = el.clientHeight
+      const trackHeight = trackEl.clientHeight
       const thumbHeight = Math.max(
         24,
-        (trackHeight * trackHeight) / el.scrollHeight,
+        (el.clientHeight * trackHeight) / el.scrollHeight,
       )
       const maxThumbTop = trackHeight - thumbHeight
       const deltaY = e.clientY - startY
@@ -614,6 +624,7 @@ function CustomScrollContainer({ children, className }) {
         {children}
       </div>
       <div
+        ref={trackRef}
         className={`glm-scroll-track ${thumbVisible ? 'visible' : ''}`}
         onMouseDown={onTrackMouseDown}
       >
