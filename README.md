@@ -76,6 +76,11 @@ npm run dev
 
 浏览器打开 `http://localhost:5173` 即可访问。
 
+## 路由
+
+- 首页待开发：`http://localhost:5173`
+- 画布页面：`http://localhost:5173/task-canvas-container`
+
 ### 构建生产版本
 
 ```bash
