@@ -13,7 +13,7 @@ function HoverText({
   children,
   text,
   direction = 'top',
-  delay = 200,
+  delay = 700,
   className = '',
   tooltipClassName = '',
 }) {
@@ -93,6 +93,7 @@ function HoverText({
       className={`hover-text-trigger ${className}`}
       onMouseEnter={show}
       onMouseLeave={hide}
+      onClick={hide}
     >
       {children}
       {visible && text && createPortal(
@@ -102,6 +103,7 @@ function HoverText({
           style={{ top: `${position.top}px`, left: `${position.left}px` }}
           onMouseEnter={show}
           onMouseLeave={hide}
+          onClick={hide}
         >
           {text}
         </span>,
