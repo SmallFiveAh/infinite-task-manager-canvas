@@ -20,9 +20,14 @@ function HoverText({
   const [visible, setVisible] = useState(false)
   const [showing, setShowing] = useState(false)
   const [position, setPosition] = useState({ top: 0, left: 0 })
+  const [actualDirection, setActualDirection] = useState(direction)
   const timerRef = useRef(null)
   const triggerRef = useRef(null)
   const tooltipRef = useRef(null)
+
+  useEffect(() => {
+    setActualDirection(direction)
+  }, [direction])
 
   const clearTimer = useCallback(() => {
     if (timerRef.current) {
@@ -56,19 +61,60 @@ function HoverText({
     const tooltipWidth = tooltip.offsetWidth || tooltip.getBoundingClientRect().width
     const tooltipHeight = tooltip.offsetHeight || tooltip.getBoundingClientRect().height
 
-    // 计算 tooltip 左上角的实际坐标（视口坐标系）
-    let top = triggerRect.top - tooltipHeight - 8
-    let left = triggerRect.left + triggerRect.width / 2 - tooltipWidth / 2
+    const GAP = 8
+    let dir = direction
+    let top
+    let left
 
-    // 防止超出视口
-    if (top < 8) top = triggerRect.bottom + 8
-    if (left < 8) left = 8
-    if (left + tooltipWidth > window.innerWidth - 8) {
-      left = window.innerWidth - tooltipWidth - 8
+    if (direction === 'top' || direction === 'bottom') {
+      // 垂直方向：tooltip 在触发元素上方或下方
+      if (direction === 'top') {
+        top = triggerRect.top - tooltipHeight - GAP
+        if (top < GAP) {
+          // 上方放不下，翻转到下方
+          top = triggerRect.bottom + GAP
+          dir = 'bottom'
+        }
+      } else {
+        top = triggerRect.bottom + GAP
+        if (top + tooltipHeight > window.innerHeight - GAP) {
+          // 下方放不下，翻转到上方
+          top = triggerRect.top - tooltipHeight - GAP
+          dir = 'top'
+        }
+      }
+      left = triggerRect.left + triggerRect.width / 2 - tooltipWidth / 2
+      if (left < GAP) left = GAP
+      if (left + tooltipWidth > window.innerWidth - GAP) {
+        left = window.innerWidth - tooltipWidth - GAP
+      }
+    } else {
+      // 水平方向：tooltip 在触发元素左侧或右侧
+      if (direction === 'left') {
+        left = triggerRect.left - tooltipWidth - GAP
+        if (left < GAP) {
+          // 左侧放不下，翻转到右侧
+          left = triggerRect.right + GAP
+          dir = 'right'
+        }
+      } else {
+        left = triggerRect.right + GAP
+        if (left + tooltipWidth > window.innerWidth - GAP) {
+          // 右侧放不下，翻转到左侧
+          left = triggerRect.left - tooltipWidth - GAP
+          dir = 'left'
+        }
+      }
+      top = triggerRect.top + triggerRect.height / 2 - tooltipHeight / 2
+      if (top < GAP) top = GAP
+      if (top + tooltipHeight > window.innerHeight - GAP) {
+        top = window.innerHeight - tooltipHeight - GAP
+      }
     }
 
     setPosition({ top, left })
-  }, [])
+    setActualDirection(dir)
+  }, [direction])
 
   useEffect(() => {
     if (!visible) return
@@ -85,7 +131,7 @@ function HoverText({
     return () => clearTimer()
   }, [clearTimer])
 
-  const directionClass = DIRECTION_MAP[direction] || DIRECTION_MAP.top
+  const directionClass = DIRECTION_MAP[actualDirection] || DIRECTION_MAP.top
 
   return (
     <span
