@@ -44,7 +44,7 @@ function LeftSidebar({ onSelectShape }) {
       <div className="task-storage-left-sidebar">
         <div className="sidebar-tools">
           {tools.map((tool) => (
-            <HoverText key={tool.id} text={tool.label}>
+            <HoverText key={tool.id} text={tool.label} direction="left">
               <button
                 className={`sidebar-tool-item ${activeTool === tool.id ? 'active' : ''}`}
                 style={{ '--tool-color': tool.color }}
@@ -55,7 +55,7 @@ function LeftSidebar({ onSelectShape }) {
             </HoverText>
           ))}
         </div>
-        <HoverText text="更多">
+        <HoverText text="更多" direction="left">
           <button className="sidebar-tool-item sidebar-tool-item--more">
             <i className="bi bi-three-dots" />
           </button>
