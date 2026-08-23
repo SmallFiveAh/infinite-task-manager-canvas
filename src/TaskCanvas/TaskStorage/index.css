@@ -1,0 +1,14 @@
+/* ---------- 任务存储层（覆盖在 canvas 之上） ---------- */
+.task-storage-container {
+  position: absolute;
+  inset: 0;
+  /* 放行空白区域的事件，让 wheel/pointer 穿透到 canvas 触发平移缩放 */
+  pointer-events: none;
+  /* 层级高于 canvas，确保可见且可交互 */
+  z-index: 10;
+}
+
+/* 任务卡片本身重新开启事件接收 */
+.task-storage-container > * {
+  pointer-events: auto;
+}

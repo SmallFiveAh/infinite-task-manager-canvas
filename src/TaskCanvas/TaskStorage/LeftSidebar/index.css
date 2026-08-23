@@ -1,0 +1,79 @@
+/* ---------- 左侧工具栏（Island 风格悬浮面板） ---------- */
+.task-storage-left-sidebar {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 6px;
+  background: var(--color-white);
+  border: 1px solid var(--default-border-color);
+  border-radius: 14px;
+  box-shadow: var(--shadow-island);
+  pointer-events: auto;
+  user-select: none;
+}
+
+/* ---------- 工具按钮容器 ---------- */
+.sidebar-tools {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+/* ---------- 单个工具按钮 ---------- */
+.sidebar-tool-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--tool-color, var(--text-color-muted));
+  font-size: 17px;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    transform 0.1s ease;
+}
+
+.sidebar-tool-item:hover {
+  background-color: color-mix(in srgb, var(--tool-color, var(--text-color-muted)) 14%, transparent);
+  color: var(--tool-color, var(--color-primary-darker));
+}
+
+.sidebar-tool-item:active {
+  transform: scale(0.92);
+}
+
+.sidebar-tool-item.active {
+  background-color: var(--tool-color, var(--color-primary));
+  color: var(--color-white);
+  box-shadow: var(--shadow-tool-active);
+}
+
+.sidebar-tool-item.active:hover {
+  background-color: color-mix(in srgb, var(--tool-color, var(--color-primary)) 88%, #000);
+}
+
+.sidebar-tool-item:focus-visible {
+  outline: 2px solid var(--tool-color, var(--color-primary));
+  outline-offset: 2px;
+}
+
+/* ---------- “更多”按钮 ---------- */
+.sidebar-tool-item--more {
+  --tool-color: #64748b;
+}
+

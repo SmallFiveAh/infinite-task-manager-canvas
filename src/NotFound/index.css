@@ -1,0 +1,192 @@
+/* ---------- 页面容器 / 点阵画布背景 ---------- */
+.notfound {
+  /* fixed 让容器脱离文档流铺满视口，body 不会被撑出滚动条 */
+  position: fixed;
+  inset: 0;
+  height: 100vh;
+  overflow-y: auto;
+  /* 隐藏滚动条但保留滚动能力 */
+  scrollbar-width: none;           /* Firefox */
+  -ms-overflow-style: none;        /* IE / 旧版 Edge */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  box-sizing: border-box;
+  /* Infinite Task Manager Canvas 标志性的点阵网格画布 */
+  background-color: var(--canvas-bg-color);
+  background-image: radial-gradient(circle, var(--grid-dot-color) 1.2px, transparent 1.2px);
+  background-size: 22px 22px;
+  background-position: 0 0;
+}
+
+/* Chrome / Safari / 新版 Edge：隐藏滚动条 */
+.notfound::-webkit-scrollbar {
+  display: none;
+}
+
+/* ---------- 内容面板（Island） ---------- */
+.notfound-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+  padding: 52px 44px 48px;
+  background: var(--island-bg-color);
+  border: 1px solid var(--default-border-color);
+  border-radius: 8px;                 /* --border-radius-lg */
+  box-shadow: var(--shadow-island);   /* Infinite Task Manager Canvas 多层细腻阴影 */
+}
+
+/* ---------- 巨大的 404 数字 ---------- */
+.notfound-code {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: clamp(76px, 17vw, 160px);
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+  color: var(--text-color);           /* Infinite Task Manager Canvas 文本黑 */
+}
+
+.notfound-code span {
+  display: inline-block;
+  animation: floatY 4.5s ease-in-out infinite;
+}
+
+.notfound-code span:nth-child(1) { animation-delay: 0s; }
+.notfound-code span:nth-child(3) { animation-delay: 1.2s; }
+
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+
+@keyframes wobble {
+  0%, 100% { border-radius: 48% 52% 47% 53% / 51% 49% 51% 49%; }
+  50%      { border-radius: 52% 48% 53% 47% / 49% 51% 49% 51%; }
+}
+
+/* ---------- 标题与正文 ---------- */
+.notfound-inner h1 {
+  margin: 18px 0 12px;
+  font-size: clamp(30px, 5.5vw, 44px);
+  font-weight: 700;
+  color: var(--text-color);
+  letter-spacing: 0.5px;
+}
+
+.notfound-inner p {
+  margin: 0 auto 8px;
+  max-width: 440px;
+  font-size: clamp(16px, 2.2vw, 19px);
+  line-height: 1.7;
+  color: var(--text-color-muted);
+}
+
+/* ---------- 手绘箭头涂鸦 ---------- */
+.notfound-arrow {
+  display: block;
+  margin: 6px auto 22px;
+  opacity: 0.85;
+  animation: arrowNudge 2.4s ease-in-out infinite;
+  transform-origin: 50% 60%;
+}
+
+.notfound-arrow path {
+  stroke: var(--text-color);
+}
+
+@keyframes arrowNudge {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(4px) rotate(-2deg); }
+}
+
+/* ---------- 按钮区 ---------- */
+.notfound-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 11px 24px;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 700;
+  border-radius: 6px;                 /* --border-radius-md */
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background 0.18s ease, border-color 0.18s ease,
+              box-shadow 0.18s ease, transform 0.12s ease;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+/* 主按钮：Infinite Task Manager Canvas 紫色填充 */
+.btn-primary {
+  color: #ffffff;
+  background: var(--color-primary);
+  box-shadow: var(--shadow-btn);
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-hover);
+  box-shadow: var(--shadow-primary-glow);
+}
+
+/* 幽灵按钮：白底 + 灰描边（Infinite Task Manager Canvas 默认按钮样式） */
+.btn-ghost {
+  color: var(--text-color);
+  background: var(--island-bg-color);
+  border-color: var(--button-border-color);
+}
+
+.btn-ghost:hover {
+  background: var(--default-border-color);  /* 接近浅紫的 hover 底色 */
+  border-color: var(--color-primary);       /* hover 时描边变主色 */
+  box-shadow: var(--shadow-ghost-hover);
+}
+
+/* ---------- 入场动画 ---------- */
+.page-enter {
+  animation: pageEnter 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes pageEnter {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 480px) {
+  .notfound-inner {
+    padding: 40px 22px 36px;
+    border-radius: 8px;
+  }
+  .notfound-actions .btn {
+    width: 100%;
+  }
+}
+
+/* 尊重用户减少动画偏好 */
+@media (prefers-reduced-motion: reduce) {
+  .notfound-code span,
+  .notfound-zero,
+  .notfound-zero::after,
+  .notfound-arrow,
+  .page-enter {
+    animation: none !important;
+  }
+}

@@ -1,0 +1,55 @@
+html,
+body,
+#root,
+* {
+  font-family: 'Caveat Variable', cursive;
+}
+
+
+/* ==========================================================
+   全局设计 Token —— 取自 Infinite Task Manager Canvas 配色体系
+   所有组件样式统一引用这些变量，便于主题维护与视觉一致性。
+   ========================================================== */
+:root {
+  /* ---------- 品牌主色（Infinite Task Manager Canvas 紫） ---------- */
+  --color-primary:           #6965db;  /* 主色 */
+  --color-primary-light:     #e3e2fe;  /* 主色 - 浅 */
+  --color-primary-darker:    #5b57d1;  /* 主色 - 较深 */
+  --color-primary-darkest:   #4a47b1;  /* 主色 - 最深 */
+  --color-primary-hover:     #5753d0;  /* 主色 - hover */
+
+  /* ---------- 中性色 / 面板 ---------- */
+  --color-white:             #ffffff;  /* 纯白 */
+  --canvas-bg-color:         #fafafa;  /* 点阵画布背景 */
+  --text-color:              #1b1b1f;  /* 主文本黑 */
+  --text-color-muted:        #6b6b76;  /* 次要文本灰 */
+
+  /* ---------- 边框 / 描边 ---------- */
+  --default-border-color:    #f1f0ff;  /* 默认边框 - 浅紫 */
+  --button-border-color:     #e9ecef;  /* 幽灵按钮描边 */
+  --grid-dot-color:          #d4d7de;  /* 点阵网格圆点 */
+
+  /* ---------- 阴影（由上述颜色组合而成） ---------- */
+  /* Infinite Task Manager Canvas 多层细腻阴影 */
+  --shadow-island:
+    0 0 0 1px rgba(0, 0, 0, 0.02),
+    rgba(0, 0, 0, 0.17) 0 1px 4px 0,
+    rgba(0, 0, 0, 0.08) 0 8px 24px 0;                 
+  
+  /* Infinite Task Manager Canvas 按钮阴影 */
+  --shadow-btn:
+    0 1px 2px rgba(0, 0, 0, 0.12);
+   
+  /* Infinite Task Manager Canvas 主色按钮 hover 光晕 */
+  --shadow-primary-glow:
+    0 0 0 1px var(--color-primary-darkest),
+    0 4px 12px rgba(105, 101, 219, 0.35);  /* 主色按钮 hover 光晕 */
+  
+  /* Infinite Task Manager Canvas 幽灵按钮 hover 描边光 */
+  --shadow-ghost-hover:
+    0 0 0 1px var(--color-primary-light);  /* 幽灵按钮 hover 描边光 */
+
+  /* Infinite Task Manager Canvas 选中工具按钮阴影 */
+  --shadow-tool-active:
+    0 2px 8px rgba(105, 101, 219, 0.35);  /* 工具按钮 active 态光晕 */
+}

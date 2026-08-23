@@ -1,0 +1,49 @@
+.hud-menu {
+  display: flex;
+  flex-direction: column;
+  width: 120px;
+  padding: 6px;
+  background: var(--color-white);
+  border: 1px solid var(--default-border-color);
+  border-radius: 12px;
+  box-shadow: var(--shadow-island);
+}
+
+.hud-menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-color);
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.hud-menu-item:hover {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary-darker);
+}
+
+.hud-menu-item.active {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.hud-menu-label {
+  flex: 1;
+  text-align: left;
+}
+
+.hud-menu-check {
+  font-size: 16px;
+  font-weight: 700;
+}

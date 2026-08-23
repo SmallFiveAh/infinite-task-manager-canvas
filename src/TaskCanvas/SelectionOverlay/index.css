@@ -1,0 +1,23 @@
+/* 选择框叠加层：铺满画布容器，介于 canvas 与 HUD/工具栏之间 */
+.selection-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  /* 默认不拦截事件，把 pointer 透给下层 canvas（平移/缩放仍可用） */
+  pointer-events: none;
+}
+
+/* 切换到选择工具后才接管左键拖拽 */
+.selection-overlay.active {
+  pointer-events: auto;
+  cursor: crosshair;
+}
+
+/* 拖拽产生的矩形框 */
+.selection-box {
+  position: absolute;
+  /* TODO: 后续可替换为项目设计 token（如 --canvas-accent-color） */
+  border: 1px solid #4a90e2;
+  background: rgba(74, 144, 226, 0.15);
+  pointer-events: none; /* 框本身不挡事件，避免干扰 overlay 的 pointermove */
+}

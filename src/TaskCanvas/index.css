@@ -1,0 +1,78 @@
+/* ---------- 无限画布容器 ---------- */
+/* fixed 让容器脱离文档流铺满视口，与 NotFound 点阵画布布局方式一致 */
+.task-canvas-container {
+  position: fixed;
+  inset: 0;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--canvas-bg-color);
+}
+
+/* ---------- canvas 元素 ---------- */
+.task-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  /* 禁用浏览器默认手势，由我们自行处理平移与缩放 */
+  touch-action: none;
+}
+
+.task-canvas:active {
+  cursor: grabbing;
+}
+
+/* ---------- 缩放百分比 HUD（右下角，点击恢复到 100%） ---------- */
+.infinite-canvas-hud {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  color: var(--text-color-muted);
+  background: var(--island-bg-color);
+  border: 1px solid var(--default-border-color);
+  border-radius: 10px;
+  box-shadow: var(--shadow-island);
+  pointer-events: auto;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.15s ease;
+}
+
+.infinite-canvas-hud:hover {
+  border-color: var(--color-primary-light);
+  box-shadow: var(--shadow-island), var(--shadow-ghost-hover);
+  transform: translateY(-1px);
+}
+
+.infinite-canvas-hud:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-btn);
+}
+
+/* 键盘聚焦轮廓（role="button" 可达性） */
+.infinite-canvas-hud:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.hud-icon {
+  font-size: 11px;
+  color: var(--text-color-muted);
+  line-height: 1;
+}
+
+.hud-text {
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
