@@ -8,7 +8,15 @@
   z-index: 10;
 }
 
-/* 任务卡片本身重新开启事件接收 */
-.task-storage-container > * {
+/* 导航栏 wrapper 本身不拦截事件，由各自内部的子元素按需开启 */
+.task-storage-navbar {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* 所有直接子元素（侧边栏 / HUD / 图形库面板）恢复交互 */
+.task-storage-container > *,
+.task-storage-navbar > * {
   pointer-events: auto;
 }

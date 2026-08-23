@@ -1,8 +1,12 @@
 import React, { useState } from 'react'
+import GraphicsLibraryMenu from './GraphicsLibraryMenu'
 import './index.css'
 
-function LeftSidebar() {
-  const [activeTool, setActiveTool] = useState('palette')
+function LeftSidebar({ onSelectShape }) {
+  // 默认不选中任何工具；避免一打开就弹出图形库菜单
+  const [activeTool, setActiveTool] = useState(null)
+  // 面板是否展开，独立于工具的"选中态"，点击才切换
+  const [isPanelOpen, setIsPanelOpen] = useState(false)
 
   const tools = [
     { id: 'palette', icon: 'bi-circle-square', label: '形状与流程图', color: '#8b5cf6' },
@@ -16,25 +20,55 @@ function LeftSidebar() {
     { id: 'card', icon: 'bi-card-text', label: '卡片', color: '#6366f1' },
   ]
 
+  const paletteTool = tools.find((t) => t.id === 'palette')
+
+  const handleToolClick = (toolId) => {
+    if (toolId === 'palette') {
+      // 点击 palette：切换面板显示；同时把工具设为 active
+      if (activeTool === 'palette' && isPanelOpen) {
+        // 已是激活状态且面板开着 → 再次点击关闭
+        setIsPanelOpen(false)
+      } else {
+        setActiveTool('palette')
+        setIsPanelOpen(true)
+      }
+    } else {
+      // 点击其它工具：切换 activeTool，并关闭图形库面板
+      setActiveTool(toolId)
+      setIsPanelOpen(false)
+    }
+  }
+
   return (
-    <div className="task-storage-left-sidebar">
-      <div className="sidebar-tools">
-        {tools.map((tool) => (
-          <button
-            key={tool.id}
-            className={`sidebar-tool-item ${activeTool === tool.id ? 'active' : ''}`}
-            style={{ '--tool-color': tool.color }}
-            onClick={() => setActiveTool(tool.id)}
-            title={tool.label}
-          >
-            <i className={`bi ${tool.icon}`} />
-          </button>
-        ))}
+    <>
+      <div className="task-storage-left-sidebar">
+        <div className="sidebar-tools">
+          {tools.map((tool) => (
+            <button
+              key={tool.id}
+              className={`sidebar-tool-item ${activeTool === tool.id ? 'active' : ''}`}
+              style={{ '--tool-color': tool.color }}
+              onClick={() => handleToolClick(tool.id)}
+              title={tool.label}
+            >
+              <i className={`bi ${tool.icon}`} />
+            </button>
+          ))}
+        </div>
+        <button className="sidebar-tool-item sidebar-tool-item--more" title="更多">
+          <i className="bi bi-three-dots" />
+        </button>
       </div>
-      <button className="sidebar-tool-item sidebar-tool-item--more" title="更多">
-        <i className="bi bi-three-dots" />
-      </button>
-    </div>
+
+      {isPanelOpen && (
+        <div
+          className="graphics-library-panel"
+          style={{ '--accent-color': paletteTool.color }}
+        >
+          <GraphicsLibraryMenu onSelectShape={onSelectShape} />
+        </div>
+      )}
+    </>
   )
 }
 

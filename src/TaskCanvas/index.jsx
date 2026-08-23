@@ -251,6 +251,33 @@ function TaskCanvas() {
     if (!canvas || !container) return
 
     const onWheel = (e) => {
+      // 如果滚轮发生在"自身需要滚动的面板/输入控件"内（如图形库菜单），
+      // 则不拦截，交给浏览器执行原生滚动，防止面板内容无法翻页。
+      const SCROLLED_PANEL_CLASSES = [
+        'graphics-library-menu',
+        'graphics-library-panel',
+        'task-storage-left-sidebar',
+        'hud-menu',
+      ]
+      let el = e.target
+      while (el && el !== container && el !== document.body) {
+        if (el instanceof HTMLElement) {
+          const matchesClass = SCROLLED_PANEL_CLASSES.some((c) =>
+            el.classList && el.classList.contains(c)
+          )
+          let canScroll = false
+          if (!matchesClass) {
+            const style = window.getComputedStyle(el)
+            const overflowY = style.overflowY
+            const hasOverflowScroll = overflowY === 'auto' || overflowY === 'scroll'
+            const heightOk = el.clientHeight > 0 && el.scrollHeight > el.clientHeight + 1
+            canScroll = hasOverflowScroll && heightOk
+          }
+          if (matchesClass || canScroll) return
+        }
+        el = el.parentElement
+      }
+
       e.preventDefault()
       const vp = viewportRef.current
       const delta = -e.deltaY * ZOOM_INTENSITY
