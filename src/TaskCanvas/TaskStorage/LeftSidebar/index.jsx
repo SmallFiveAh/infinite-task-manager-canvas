@@ -44,23 +44,22 @@ function LeftSidebar({ onSelectShape }) {
       <div className="task-storage-left-sidebar">
         <div className="sidebar-tools">
           {tools.map((tool) => (
-            <button
-              key={tool.id}
-              className={`sidebar-tool-item ${activeTool === tool.id ? 'active' : ''}`}
-              style={{ '--tool-color': tool.color }}
-              onClick={() => handleToolClick(tool.id)}
-            >
-              <HoverText text={tool.label}>
+            <HoverText key={tool.id} text={tool.label}>
+              <button
+                className={`sidebar-tool-item ${activeTool === tool.id ? 'active' : ''}`}
+                style={{ '--tool-color': tool.color }}
+                onClick={() => handleToolClick(tool.id)}
+              >
                 <i className={`bi ${tool.icon}`} />
-              </HoverText>
-            </button>
+              </button>
+            </HoverText>
           ))}
         </div>
-        <button className="sidebar-tool-item sidebar-tool-item--more">
-          <HoverText text="更多">
+        <HoverText text="更多">
+          <button className="sidebar-tool-item sidebar-tool-item--more">
             <i className="bi bi-three-dots" />
-          </HoverText>
-        </button>
+          </button>
+        </HoverText>
       </div>
 
       {isPanelOpen && (

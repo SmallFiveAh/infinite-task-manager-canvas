@@ -2,7 +2,6 @@
 .hover-text-trigger {
   display: inline-flex;
   align-items: center;
-  position: relative;
 }
 
 /* ---------- 浮动提示框（绝对定位，跟随鼠标/触发元素） ---------- */

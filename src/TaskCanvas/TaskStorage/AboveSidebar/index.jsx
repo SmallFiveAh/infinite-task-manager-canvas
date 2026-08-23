@@ -38,55 +38,55 @@ function AboveSidebar({ zoomPercent = 100, onZoomChange, onZoomReset, activeTool
 
   return (
     <div className="task-storage-above-sidebar">
-      <button
-        className={`above-tool-item ${locked ? 'active' : ''}`}
-        onClick={() => setLocked(!locked)}
-      >
-        <HoverText text={locked ? '已锁定' : '锁定画布'}>
+      <HoverText text={locked ? '已锁定' : '锁定画布'}>
+        <button
+          className={`above-tool-item ${locked ? 'active' : ''}`}
+          onClick={() => setLocked(!locked)}
+        >
           <i className={`bi ${locked ? 'bi-lock-fill' : 'bi-unlock'}`} />
-        </HoverText>
-      </button>
+        </button>
+      </HoverText>
 
       <div className="above-divider" />
 
-      <button
-        className={`above-tool-item ${activeTool === 'select' ? 'active' : ''}`}
-        onClick={() => handleToolChange('select')}
-      >
-        <HoverText text='选择(V)'>
+      <HoverText text='选择(V)'>
+        <button
+          className={`above-tool-item ${activeTool === 'select' ? 'active' : ''}`}
+          onClick={() => handleToolChange('select')}
+        >
           <i className="bi bi-cursor-fill" />
-        </HoverText>
-      </button>
+        </button>
+      </HoverText>
 
-      <button
-        className={`above-tool-item ${activeTool === 'navigate' ? 'active' : ''}`}
-        onClick={() => handleToolChange('navigate')}
-      >
-        <HoverText text='移动(H)'>
+      <HoverText text='移动(H)'>
+        <button
+          className={`above-tool-item ${activeTool === 'navigate' ? 'active' : ''}`}
+          onClick={() => handleToolChange('navigate')}
+        >
           <i className="bi bi-hand-index-thumb-fill" />
-        </HoverText>
-      </button>
+        </button>
+      </HoverText>
 
       <div className="above-divider" />
 
-      <button
-        className="above-tool-item"
-        onClick={handleZoomOut}
-      >
-        <HoverText text='缩小'>
+      <HoverText text='缩小'>
+        <button
+          className="above-tool-item"
+          onClick={handleZoomOut}
+        >
           <i className="bi bi-dash-lg" />
-        </HoverText>
-      </button>
+        </button>
+      </HoverText>
 
       <div className="above-zoom-wrapper" ref={hudMenuRef}>
-        <div
-          className={`above-zoom-label ${hudMenuOpen ? 'active' : ''}`}
-          onClick={() => setHudMenuOpen(!hudMenuOpen)}
-        >
-          <HoverText text="缩放比例">
+        <HoverText text="缩放比例">
+          <div
+            className={`above-zoom-label ${hudMenuOpen ? 'active' : ''}`}
+            onClick={() => setHudMenuOpen(!hudMenuOpen)}
+          >
             {zoomPercent}%
-          </HoverText>
-        </div>
+          </div>
+        </HoverText>
         {hudMenuOpen && (
           <div className="above-zoom-dropdown">
             <HudMenu zoom={zoomPercent} onZoomChange={handleSelectZoom} />
@@ -94,32 +94,32 @@ function AboveSidebar({ zoomPercent = 100, onZoomChange, onZoomReset, activeTool
         )}
       </div>
 
-      <button
-        className="above-tool-item"
-        onClick={handleZoomIn}
-      >
-        <HoverText text='放大'>
+      <HoverText text='放大'>
+        <button
+          className="above-tool-item"
+          onClick={handleZoomIn}
+        >
           <i className="bi bi-plus-lg" />
-        </HoverText>
-      </button>
+        </button>
+      </HoverText>
 
       <div className="above-divider" />
 
-      <button
-        className="above-tool-item"
-      >
-        <HoverText text='撤销(Z)'>
+      <HoverText text='撤销(Z)'>
+        <button
+          className="above-tool-item"
+        >
           <i className="bi bi-arrow-counterclockwise" />
-        </HoverText>
-      </button>
+        </button>
+      </HoverText>
 
-      <button
-        className="above-tool-item"
-      >
-        <HoverText text='重做(Y)'>
+      <HoverText text='重做(Y)'>
+        <button
+          className="above-tool-item"
+        >
           <i className="bi bi-arrow-clockwise" />
-        </HoverText>
-      </button>
+        </button>
+      </HoverText>
     </div>
   )
 }

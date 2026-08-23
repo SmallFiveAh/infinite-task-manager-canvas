@@ -23,11 +23,15 @@
 }
 
 /* ---------- 缩放百分比 HUD（右下角，点击恢复到 100%） ---------- */
-.infinite-canvas-hud {
+/* 定位放在 HoverText 触发元素上，避免 absolute 子元素使触发 span 零尺寸 */
+.infinite-canvas-hud-wrapper {
   position: absolute;
   right: 20px;
   bottom: 20px;
   z-index: 10;
+}
+
+.infinite-canvas-hud {
   display: flex;
   align-items: center;
   gap: 8px;

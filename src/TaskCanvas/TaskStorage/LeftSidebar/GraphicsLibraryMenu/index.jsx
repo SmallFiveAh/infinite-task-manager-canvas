@@ -467,16 +467,16 @@ function CollapsibleSection({ title, defaultOpen = true, children }) {
 function ShapeCell({ item, selected, onClick }) {
   const { Comp, name } = item
   return (
-    <button
-      className={`glm-cell ${selected ? 'selected' : ''}`}
-      onClick={onClick}
-    >
-      <HoverText text={name}>
+    <HoverText text={name}>
+      <button
+        className={`glm-cell ${selected ? 'selected' : ''}`}
+        onClick={onClick}
+      >
         <svg viewBox="0 0 40 40" className="glm-cell-svg" aria-hidden="true">
           <Comp />
         </svg>
-      </HoverText>
-    </button>
+      </button>
+    </HoverText>
   )
 }
 
