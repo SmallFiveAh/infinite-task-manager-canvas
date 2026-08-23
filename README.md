@@ -2,7 +2,7 @@
 
 # 🎨 Infinite Task Manager Canvas
 
-**一个基于 React 的无限画布任务管理平台 —— 让你的任务在无限空间中自由发挥创作**
+**一款无限画布任务管理平台基于 React 实现 —— 让你的任务在无限空间中自由发挥创作**
 
 [![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)](https://react.dev)
 [![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)](https://vitejs.dev)
