@@ -384,7 +384,6 @@ const categories = [
           { key: 'b-r-square', name: '圆角正方形', Comp: BRoundedSquare },
           { key: 'b-soft-sq', name: '超圆角正方形', Comp: BSoftSquare },
           { key: 'b-circle', name: '圆形', Comp: BCircle },
-          { key: 'b-refresh', name: '刷新', Comp: BRefresh },
           { key: 'b-triangle', name: '三角形', Comp: BTriangle },
           { key: 'b-diamond', name: '菱形', Comp: BDiamond },
           { key: 'b-para', name: '平行四边形', Comp: BParallelogram },
