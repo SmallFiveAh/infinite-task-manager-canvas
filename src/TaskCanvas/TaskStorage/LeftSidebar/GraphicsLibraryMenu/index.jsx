@@ -163,7 +163,7 @@ const SEqual = () => (
 )
 // 31. 半圆
 const SSemicircle = () => (
-  <path d="M6 20 a14 14 0 0 1 28 0 Z" {...strokeProps} />
+  <path d="M6 27 a14 14 0 0 1 28 0 Z" {...strokeProps} />
 )
 // 32. 梯形
 const STrapezoid = () => <STrapBottom />
