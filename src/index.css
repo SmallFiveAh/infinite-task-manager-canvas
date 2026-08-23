@@ -27,7 +27,7 @@ body,
   /* ---------- 边框 / 描边 ---------- */
   --default-border-color:    #f1f0ff;  /* 默认边框 - 浅紫 */
   --button-border-color:     #e9ecef;  /* 幽灵按钮描边 */
-  --grid-dot-color:          #d4d7de;  /* 点阵网格圆点 */
+  --grid-dot-color:          #b2b5bd;  /* 点阵网格圆点颜色 */
 
   /* ---------- 阴影（由上述颜色组合而成） ---------- */
   /* Infinite Task Manager Canvas 多层细腻阴影 */
