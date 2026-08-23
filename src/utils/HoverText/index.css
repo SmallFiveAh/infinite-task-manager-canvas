@@ -1,0 +1,105 @@
+/* ---------- 触发区域 ---------- */
+.hover-text-trigger {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+}
+
+/* ---------- 浮动提示框（绝对定位，跟随鼠标/触发元素） ---------- */
+.hover-text-tooltip {
+  position: fixed;
+  z-index: 9999;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: inherit;
+  line-height: 1.4;
+  color: var(--text-color);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  background: var(--color-white);
+  border: 1px solid var(--default-border-color);
+  border-radius: 6px;
+  box-shadow: var(--shadow-island);
+  opacity: 0;
+  transform: scale(0.92);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.hover-text-tooltip.hover-text-show {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ---------- 方向：上方 ---------- */
+.hover-text-top {
+  transform-origin: bottom center;
+}
+.hover-text-top::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid var(--color-white);
+  filter: drop-shadow(0 -1px 0 var(--default-border-color));
+}
+
+/* ---------- 方向：下方 ---------- */
+.hover-text-bottom {
+  transform-origin: top center;
+}
+.hover-text-bottom::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid var(--color-white);
+  filter: drop-shadow(0 1px 0 var(--default-border-color));
+}
+
+/* ---------- 方向：左侧 ---------- */
+.hover-text-left {
+  transform-origin: right center;
+}
+.hover-text-left::after {
+  content: '';
+  position: absolute;
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 5px solid var(--color-white);
+  filter: drop-shadow(1px 0 0 var(--default-border-color));
+}
+
+/* ---------- 方向：右侧 ---------- */
+.hover-text-right {
+  transform-origin: left center;
+}
+.hover-text-right::after {
+  content: '';
+  position: absolute;
+  left: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-right: 5px solid var(--color-white);
+  filter: drop-shadow(-1px 0 0 var(--default-border-color));
+}
