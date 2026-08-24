@@ -1,12 +1,16 @@
 import React, { useState } from 'react'
 import GraphicsLibraryMenu from './GraphicsLibraryMenu'
+import NotePanel from './NotePanel'
 import './index.css'
 
-function LeftSidebar({ onSelectShape }) {
+// 需要弹出面板的工具 ID 列表
+const PANEL_TOOLS = ['palette', 'sticky']
+
+function LeftSidebar({ onSelectShape, onSelectNote }) {
   // 默认不选中任何工具；避免一打开就弹出图形库菜单
   const [activeTool, setActiveTool] = useState(null)
-  // 面板是否展开，独立于工具的"选中态"，点击才切换
-  const [isPanelOpen, setIsPanelOpen] = useState(false)
+  // 当前打开的面板工具 ID（null 表示无面板）
+  const [openPanel, setOpenPanel] = useState(null)
 
   const tools = [
     { id: 'palette', icon: 'bi-circle-square', label: '形状与流程图', color: '#8b5cf6' },
@@ -21,21 +25,22 @@ function LeftSidebar({ onSelectShape }) {
   ]
 
   const paletteTool = tools.find((t) => t.id === 'palette')
+  const stickyTool = tools.find((t) => t.id === 'sticky')
 
   const handleToolClick = (toolId) => {
-    if (toolId === 'palette') {
-      // 点击 palette：切换面板显示；同时把工具设为 active
-      if (activeTool === 'palette' && isPanelOpen) {
+    if (PANEL_TOOLS.includes(toolId)) {
+      // 点击带面板的工具：切换面板显示
+      if (activeTool === toolId && openPanel === toolId) {
         // 已是激活状态且面板开着 → 再次点击关闭
-        setIsPanelOpen(false)
+        setOpenPanel(null)
       } else {
-        setActiveTool('palette')
-        setIsPanelOpen(true)
+        setActiveTool(toolId)
+        setOpenPanel(toolId)
       }
     } else {
-      // 点击其它工具：切换 activeTool，并关闭图形库面板
+      // 点击其它工具：切换 activeTool，并关闭所有面板
       setActiveTool(toolId)
-      setIsPanelOpen(false)
+      setOpenPanel(null)
     }
   }
 
@@ -62,12 +67,23 @@ function LeftSidebar({ onSelectShape }) {
         </HoverText>
       </div>
 
-      {isPanelOpen && (
+      {/* 图形库面板 */}
+      {openPanel === 'palette' && (
         <div
           className="graphics-library-panel"
           style={{ '--accent-color': paletteTool.color }}
         >
           <GraphicsLibraryMenu onSelectShape={onSelectShape} />
+        </div>
+      )}
+
+      {/* 便签面板 */}
+      {openPanel === 'sticky' && (
+        <div
+          className="graphics-library-panel"
+          style={{ '--accent-color': stickyTool.color }}
+        >
+          <NotePanel onSelectNote={onSelectNote} />
         </div>
       )}
     </>

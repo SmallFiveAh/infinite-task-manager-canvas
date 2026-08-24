@@ -1,0 +1,269 @@
+/* =========================================================
+   NotePanel 便签样式面板
+   - 标题 + Tab 切换 + 分组网格
+   - 支持矩形 / 异形两种便签样式
+   ========================================================= */
+
+.note-panel {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  color: #1f2937;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  font-size: 13px;
+  line-height: 1.4;
+  position: relative;
+}
+
+/* ---------- 头部 ---------- */
+.np-header {
+  padding: 14px 16px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.np-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #0f172a;
+  letter-spacing: 0.5px;
+}
+
+/* ---------- Tab 栏 ---------- */
+.np-tab-bar {
+  display: flex;
+  gap: 4px;
+  padding: 0 12px 8px;
+}
+
+.np-tab {
+  flex: 1;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #64748b;
+  background: #f1f5f9;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.np-tab:hover {
+  background: #e2e8f0;
+  color: #334155;
+}
+
+.np-tab.active {
+  background: #ffffff;
+  color: #eab308;
+  border-color: #e5e7eb;
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 2px 6px rgba(15, 23, 42, 0.06);
+}
+
+.np-tab.active:hover {
+  background: #ffffff;
+  color: #ca8a04;
+}
+
+/* ---------- 内容区 ---------- */
+.np-content {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 4px 12px 16px;
+  /* 隐藏原生滚动条 */
+  scrollbar-width: thin;
+  scrollbar-color: #e2e8f0 transparent;
+}
+.np-content::-webkit-scrollbar {
+  width: 6px;
+}
+.np-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+.np-content::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 3px;
+}
+.np-content::-webkit-scrollbar-thumb:hover {
+  background: #cbd5e1;
+}
+
+/* ---------- 分组 ---------- */
+.np-group {
+  margin-bottom: 16px;
+}
+
+.np-group:last-child {
+  margin-bottom: 0;
+}
+
+.np-group-title {
+  padding: 8px 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  letter-spacing: 0.3px;
+}
+
+/* ---------- 网格 ---------- */
+.np-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+/* 异形网格使用 4 列稍窄 */
+.np-grid--irregular {
+  gap: 6px;
+}
+
+/* ---------- 便签单元格 (矩形) ---------- */
+.np-cell {
+  position: relative;
+  width: 100%;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  background: transparent;
+  border-radius: 4px;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.15s ease;
+}
+
+.np-cell:hover {
+  transform: translateY(-2px);
+}
+
+.np-cell:active {
+  transform: translateY(0) scale(0.96);
+}
+
+.np-cell--rect {
+  background: var(--note-color);
+  border: 1.5px solid var(--note-border);
+  border-radius: 4px;
+  box-shadow:
+    0 1px 3px rgba(15, 23, 42, 0.06),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+}
+
+.np-cell--rect .np-cell-shine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 35%;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  border-radius: 4px 4px 0 0;
+  pointer-events: none;
+}
+
+.np-cell--rect.selected {
+  box-shadow:
+    0 0 0 2px #eab308,
+    0 4px 12px rgba(234, 179, 8, 0.25);
+}
+
+/* ---------- 便签单元格 (异形) ---------- */
+.np-cell--irregular {
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.np-cell--irregular .np-cell-inner {
+  width: 80%;
+  height: 80%;
+  background: var(--note-color);
+  border: 1.5px solid var(--note-border);
+  border-radius: 18px;
+  box-shadow:
+    0 1px 3px rgba(15, 23, 42, 0.06),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.15s ease;
+}
+
+.np-cell--irregular.selected .np-cell-inner {
+  box-shadow:
+    0 0 0 2px #eab308,
+    0 4px 12px rgba(234, 179, 8, 0.25);
+}
+
+/* 异形特殊样式 */
+.np-cell--irregular.shape-cloud .np-cell-inner {
+  width: 85%;
+  height: 75%;
+  border-radius: 50%;
+}
+
+.np-cell--irregular.shape-wave .np-cell-inner {
+  width: 88%;
+  height: 70%;
+  border-radius: 14px;
+  /* 波浪底边：用 polygon 模拟波浪 */
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% 85%,
+    90% 95%,
+    75% 85%,
+    60% 95%,
+    45% 85%,
+    30% 95%,
+    15% 85%,
+    0% 95%
+  );
+}
+
+.np-cell--irregular.shape-tag .np-cell-inner {
+  width: 85%;
+  height: 60%;
+  /* 右侧尖角标签形状 */
+  clip-path: polygon(0% 0%, 85% 0%, 100% 50%, 85% 100%, 0% 100%);
+  border-radius: 0;
+}
+
+.np-cell--irregular.shape-pencil .np-cell-inner {
+  width: 70%;
+  height: 55%;
+  /* 铅笔形状：左侧矩形 + 右侧三角尖头 */
+  clip-path: polygon(
+    0% 0%,
+    70% 0%,
+    100% 50%,
+    70% 100%,
+    0% 100%
+  );
+  border-radius: 0;
+}
+
+/* 选中态共享 */
+.np-cell.selected {
+  transform: translateY(-2px);
+}
+
+/* ---------- 响应式小屏 ---------- */
+@media (max-width: 280px) {
+  .np-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
