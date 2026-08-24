@@ -97,18 +97,6 @@
   --accent-color: #8b5cf6;
 }
 
-.graphics-library-panel::before {
-  content: '';
-  position: absolute;
-  top: 18px;
-  left: -7px;
-  width: 12px;
-  height: 12px;
-  background: var(--color-white, #ffffff);
-  border-left: 1px solid var(--default-border-color, #e5e7eb);
-  border-top: 1px solid var(--default-border-color, #e5e7eb);
-  transform: rotate(-45deg);
-}
 
 @keyframes glm-panel-in {
   from {
