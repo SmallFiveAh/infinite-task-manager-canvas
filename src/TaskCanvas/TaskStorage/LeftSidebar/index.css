@@ -77,17 +77,16 @@
   --tool-color: #64748b;
 }
 
-/* ---------- 图形库弹出面板（悬浮在侧边栏右侧） ---------- */
 .graphics-library-panel {
   position: absolute;
   left: calc(16px + 48px + 10px); /* 侧边栏 left + 宽度 + 间距 */
-  top: 16px;
-  bottom: 16px;
-  width: 340px;
+  top: 50%;
+  width: 300px;
+  transform: translateY(-50%);
   display: flex;
   flex-direction: column;
-  background: var(--color-white, #ffffff);
-  border: 1px solid var(--default-border-color, #e5e7eb);
+  background: var(--color-white);
+  border: 1px solid var(--default-border-color);
   border-radius: 16px;
   box-shadow: var(--shadow-island, 0 8px 28px rgba(15, 23, 42, 0.1));
   overflow: hidden;
