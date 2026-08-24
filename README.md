@@ -7,6 +7,7 @@
 [![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)](https://react.dev)
 [![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)](https://vitejs.dev)
 [![React Router](https://img.shields.io/badge/React%20Router-7-CA4245?logo=react-router&logoColor=white)](https://reactrouter.com)
+[![xyflow](https://img.shields.io/badge/xyflow-12-F6478F?logo=xyflow&logoColor=white)](https://xyflow.com)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 [![Version](https://img.shields.io/badge/Version-1.0.0-blueviolet)](#)
 
