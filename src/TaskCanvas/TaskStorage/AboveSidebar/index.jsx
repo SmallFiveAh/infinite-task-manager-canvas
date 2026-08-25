@@ -1,15 +1,24 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState } from 'react'
+import HoverText from '../../../utils/HoverText'
 import HudMenu from './HudMenu'
+import ToolButton from './ToolButton'
+import useClickOutside from './useClickOutside'
 import './index.css'
 
-function AboveSidebar({ zoomPercent = 100, onZoomChange, onZoomReset, activeTool = 'select', onActiveToolChange }) {
+function AboveSidebar({
+  zoomPercent = 100,
+  onZoomChange,
+  onZoomReset,
+  activeTool = 'select',
+  onActiveToolChange,
+}) {
   const [locked, setLocked] = useState(false)
   const [hudMenuOpen, setHudMenuOpen] = useState(false)
-  // 工具切换交给父组件控制；onActiveToolChange 缺省时退化为本组件内不可变状态
+  const hudMenuRef = useClickOutside(() => setHudMenuOpen(false))
+
   const handleToolChange = (tool) => {
     if (onActiveToolChange) onActiveToolChange(tool)
   }
-  const hudMenuRef = useRef(null)
 
   const handleZoomIn = () => {
     if (onZoomChange) onZoomChange(Math.min(400, zoomPercent + 10))
@@ -24,59 +33,34 @@ function AboveSidebar({ zoomPercent = 100, onZoomChange, onZoomReset, activeTool
     setHudMenuOpen(false)
   }
 
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (hudMenuRef.current && !hudMenuRef.current.contains(e.target)) {
-        setHudMenuOpen(false)
-      }
-    }
-    if (hudMenuOpen) {
-      document.addEventListener('mousedown', handleClickOutside)
-    }
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [hudMenuOpen])
-
   return (
     <div className="task-storage-above-sidebar">
-      <HoverText text={locked ? '已锁定' : '锁定画布'}>
-        <button
-          className={`above-tool-item ${locked ? 'active' : ''}`}
-          onClick={() => setLocked(!locked)}
-        >
-          <i className={`bi ${locked ? 'bi-lock-fill' : 'bi-unlock'}`} />
-        </button>
-      </HoverText>
+      <ToolButton
+        text={locked ? '已锁定' : '锁定画布'}
+        icon={locked ? 'bi-lock-fill' : 'bi-unlock'}
+        active={locked}
+        onClick={() => setLocked(!locked)}
+      />
 
       <div className="above-divider" />
 
-      <HoverText text='选择(V)'>
-        <button
-          className={`above-tool-item ${activeTool === 'select' ? 'active' : ''}`}
-          onClick={() => handleToolChange('select')}
-        >
-          <i className="bi bi-cursor-fill" />
-        </button>
-      </HoverText>
+      <ToolButton
+        text="选择(V)"
+        icon="bi-cursor-fill"
+        active={activeTool === 'select'}
+        onClick={() => handleToolChange('select')}
+      />
 
-      <HoverText text='移动(H)'>
-        <button
-          className={`above-tool-item ${activeTool === 'navigate' ? 'active' : ''}`}
-          onClick={() => handleToolChange('navigate')}
-        >
-          <i className="bi bi-hand-index-thumb-fill" />
-        </button>
-      </HoverText>
+      <ToolButton
+        text="移动(H)"
+        icon="bi-hand-index-thumb-fill"
+        active={activeTool === 'navigate'}
+        onClick={() => handleToolChange('navigate')}
+      />
 
       <div className="above-divider" />
 
-      <HoverText text='缩小'>
-        <button
-          className="above-tool-item"
-          onClick={handleZoomOut}
-        >
-          <i className="bi bi-dash-lg" />
-        </button>
-      </HoverText>
+      <ToolButton text="缩小" icon="bi-dash-lg" onClick={handleZoomOut} />
 
       <div className="above-zoom-wrapper" ref={hudMenuRef}>
         <HoverText text="缩放比例">
@@ -94,32 +78,12 @@ function AboveSidebar({ zoomPercent = 100, onZoomChange, onZoomReset, activeTool
         )}
       </div>
 
-      <HoverText text='放大'>
-        <button
-          className="above-tool-item"
-          onClick={handleZoomIn}
-        >
-          <i className="bi bi-plus-lg" />
-        </button>
-      </HoverText>
+      <ToolButton text="放大" icon="bi-plus-lg" onClick={handleZoomIn} />
 
       <div className="above-divider" />
 
-      <HoverText text='撤销(Z)'>
-        <button
-          className="above-tool-item"
-        >
-          <i className="bi bi-arrow-counterclockwise" />
-        </button>
-      </HoverText>
-
-      <HoverText text='重做(Y)'>
-        <button
-          className="above-tool-item"
-        >
-          <i className="bi bi-arrow-clockwise" />
-        </button>
-      </HoverText>
+      <ToolButton text="撤销(Z)" icon="bi-arrow-counterclockwise" />
+      <ToolButton text="重做(Y)" icon="bi-arrow-clockwise" />
     </div>
   )
 }
