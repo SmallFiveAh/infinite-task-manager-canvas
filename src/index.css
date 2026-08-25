@@ -20,9 +20,12 @@ body,
 
   /* ---------- 中性色 / 面板 ---------- */
   --color-white:             #ffffff;  /* 纯白 */
+  --color-dark:              #1e1e26;  /* 深色 - 用于深色背景组件 */
+  --color-dark-hover:        #2a2a35;  /* 深色 hover 态 */
   --canvas-bg-color:         #fafafa;  /* 点阵画布背景 */
   --text-color:              #1b1b1f;  /* 主文本黑 */
   --text-color-muted:        #6b6b76;  /* 次要文本灰 */
+  --text-color-light:        #e8e8ed;  /* 浅色文本 - 用于深色背景 */
 
   /* ---------- 边框 / 描边 ---------- */
   --default-border-color:    #f1f0ff;  /* 默认边框 - 浅紫 */
