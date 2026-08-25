@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import HoverText from '../../../utils/HoverText'
+import HoverText from 'utils/HoverText'
 import GraphicsLibraryMenu from './GraphicsLibraryMenu'
 import NotePanel from './NotePanel'
 import ToolButton from './ToolButton'

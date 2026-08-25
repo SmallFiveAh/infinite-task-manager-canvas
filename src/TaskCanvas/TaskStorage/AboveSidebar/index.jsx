@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import HoverText from '../../../utils/HoverText'
+import HoverText from 'utils/HoverText'
 import HudMenu from './HudMenu'
 import ToolButton from './ToolButton'
 import useClickOutside from './useClickOutside'

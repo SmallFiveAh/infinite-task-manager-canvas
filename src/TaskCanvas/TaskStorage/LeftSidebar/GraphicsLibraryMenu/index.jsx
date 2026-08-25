@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import HoverText from '../../../../utils/HoverText'
-import CustomScrollContainer from './CustomScrollContainer'
+import HoverText from 'utils/HoverText'
+import CustomScrollContainer from 'utils/CustomScrollContainer'
 import { categories } from './data'
 import './index.css'
 

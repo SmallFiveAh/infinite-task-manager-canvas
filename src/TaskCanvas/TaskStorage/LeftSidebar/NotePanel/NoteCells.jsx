@@ -1,5 +1,5 @@
 import React, { memo } from 'react'
-import HoverText from '../../../../utils/HoverText'
+import HoverText from 'utils/HoverText'
 
 /* =========================================================
    便签单元格（memo 优化：props 均为稳定引用，

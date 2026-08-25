@@ -1,5 +1,5 @@
 import React from 'react'
-import HoverText from '../../../utils/HoverText'
+import HoverText from 'utils/HoverText'
 
 // 顶部工具栏的通用图标按钮：HoverText 提示 + 图标
 function ToolButton({ text, icon, active = false, onClick, className = '' }) {

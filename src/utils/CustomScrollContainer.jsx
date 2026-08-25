@@ -100,6 +100,7 @@ function CustomScrollContainer({ children, className }) {
     // 点击在 thumb 上方 → 上翻一页；下方 → 下翻一页
     const pageDelta = clickY < thumbT ? -el.clientHeight : el.clientHeight
     el.scrollTop += pageDelta
+    updateThumb()
   }
 
   return (

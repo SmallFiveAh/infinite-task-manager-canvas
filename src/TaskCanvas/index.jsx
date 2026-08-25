@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from 'react'
-import HoverText from '../utils/HoverText'
+import HoverText from 'utils/HoverText'
 import SelectionOverlay from './SelectionOverlay'
 import TaskStorage from './TaskStorage'
 import useCanvasRenderer from './hooks/useCanvasRenderer'
