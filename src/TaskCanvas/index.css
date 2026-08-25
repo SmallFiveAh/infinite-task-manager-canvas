@@ -41,7 +41,7 @@
   letter-spacing: 0.01em;
   line-height: 1.2;
   color: var(--text-color-muted);
-  background: var(--island-bg-color);
+  background: var(--color-white);
   border: 1px solid var(--default-border-color);
   border-radius: 10px;
   box-shadow: var(--shadow-island);
