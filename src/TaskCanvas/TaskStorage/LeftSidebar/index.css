@@ -82,6 +82,8 @@
   left: calc(16px + 48px + 10px); /* 侧边栏 left + 宽度 + 间距 */
   top: 50%;
   width: 300px;
+  max-height: min(560px, calc(100vh - 96px));
+  min-height: 0;
   transform: translateY(-50%);
   display: flex;
   flex-direction: column;
