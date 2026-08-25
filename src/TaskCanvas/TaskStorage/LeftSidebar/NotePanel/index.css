@@ -128,6 +128,12 @@
   gap: 6px;
 }
 
+/* ---------- HoverText 触发区（网格单元格撑满列宽） ---------- */
+.np-cell-hover-trigger {
+  display: block;
+  width: 100%;
+}
+
 /* ---------- 便签单元格 (矩形) ---------- */
 .np-cell {
   position: relative;
