@@ -22,6 +22,21 @@
   cursor: grabbing;
 }
 
+/* ---------- 拖放便签时的画布反馈 ---------- */
+.task-canvas-container.is-dragging-note {
+  cursor: copy;
+}
+
+/* 便签拖入画布时显示虚线高亮框，提示可放置 */
+.task-canvas-container.is-dragging-note::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 2px dashed rgba(234, 179, 8, 0.65);
+  pointer-events: none;
+  z-index: 6;
+}
+
 /* ---------- 缩放百分比 HUD（右下角，点击恢复到 100%） ---------- */
 /* 定位放在 HoverText 触发元素上，避免 absolute 子元素使触发 span 零尺寸 */
 .infinite-canvas-hud-wrapper {

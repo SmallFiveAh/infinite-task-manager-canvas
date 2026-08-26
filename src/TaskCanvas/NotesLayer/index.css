@@ -1,0 +1,49 @@
+/* 便签 DOM 层：铺满画布但不拦截事件，仅便签元素本身可交互。
+   层级高于选择覆盖层(z-index:5)，保证选择工具下便签仍可直接操作 */
+.notes-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+}
+
+/* 平移（navigate）工具下禁止便签交互，保证画布可跨便签平移 */
+.notes-layer--panning .canvas-note {
+  pointer-events: none;
+  cursor: default;
+}
+
+/* 单个便签：真实 DOM 元素，可悬停、拖拽 */
+.canvas-note {
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: auto;
+  cursor: grab;
+  touch-action: none; /* 触摸拖拽时不触发浏览器滚动/手势 */
+  user-select: none;
+  box-sizing: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.12);
+  /* 常驻透明 outline：hover 只过渡颜色，避免边框瞬间出现/消失造成闪烁 */
+  outline: 1px solid transparent;
+  outline-offset: 1px;
+  transition: box-shadow 0.15s ease, outline-color 0.15s ease;
+  will-change: transform;
+}
+
+.canvas-note:hover {
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.18);
+  outline-color: rgba(0, 0, 0, 0.08);
+}
+
+/* 拖拽中的便签：高亮描边 + 抬升投影 */
+.canvas-note--dragging {
+  cursor: grabbing;
+  z-index: 5;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.28);
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+

@@ -1,10 +1,15 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import HoverText from 'utils/HoverText'
+import { createNoteDragImage } from 'utils/drawNote'
 import GraphicsLibraryMenu from './GraphicsLibraryMenu'
 import NotePanel from './NotePanel'
 import ToolButton from './ToolButton'
 import { TOOLS, PANEL_TOOLS, PANEL_TOOL_BY_ID } from './tools'
+import { buildRectSelection, noteColors, rectangularGroups } from './NotePanel/data'
 import './index.css'
+
+// 拖放到画布时默认创建的便签样式：柠檬黄正方形
+const DEFAULT_NOTE_STYLE = buildRectSelection(rectangularGroups[0], noteColors[0])
 
 function LeftSidebar({ onSelectShape, onSelectNote }) {
   // 默认不选中任何工具；避免一打开就弹出图形库菜单
@@ -32,6 +37,14 @@ function LeftSidebar({ onSelectShape, onSelectNote }) {
   const paletteTool = PANEL_TOOL_BY_ID.palette
   const stickyTool = PANEL_TOOL_BY_ID.sticky
 
+  // 便签按钮拖拽开始：写入拖拽数据 + 自定义柠檬黄预览图
+  const handleStickyDragStart = useCallback((e) => {
+    e.dataTransfer.setData('application/x-canvas-note', 'sticky')
+    e.dataTransfer.effectAllowed = 'copy'
+    const preview = createNoteDragImage(DEFAULT_NOTE_STYLE)
+    e.dataTransfer.setDragImage(preview, preview.width / 2, preview.height / 2)
+  }, [])
+
   return (
     <>
       <div className="task-storage-left-sidebar">
@@ -42,6 +55,8 @@ function LeftSidebar({ onSelectShape, onSelectNote }) {
               tool={tool}
               active={activeTool === tool.id}
               onClick={() => handleToolClick(tool.id)}
+              draggable={tool.id === 'sticky'}
+              onDragStart={tool.id === 'sticky' ? handleStickyDragStart : undefined}
             />
           ))}
         </div>

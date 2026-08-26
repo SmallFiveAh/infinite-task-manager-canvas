@@ -8,7 +8,7 @@ import './index.css'
 function AboveSidebar({
   zoomPercent = 100,
   onZoomChange,
-  onZoomReset,
+  onZoomReset: _onZoomReset,
   activeTool = 'select',
   onActiveToolChange,
 }) {

@@ -95,7 +95,6 @@ function CustomScrollContainer({ children, className }) {
     if (!el) return
     const rect = e.currentTarget.getBoundingClientRect()
     const clickY = e.clientY - rect.top
-    const thumbH = thumbStyle.height
     const thumbT = thumbStyle.top
     // 点击在 thumb 上方 → 上翻一页；下方 → 下翻一页
     const pageDelta = clickY < thumbT ? -el.clientHeight : el.clientHeight

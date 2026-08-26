@@ -25,6 +25,8 @@ function HoverText({
   const triggerRef = useRef(null)
   const tooltipRef = useRef(null)
 
+  // direction prop 变化时同步 actualDirection（提交后执行，遵守渲染纯函数原则；
+  // 视口空间不足时的翻转方向由 updatePosition 在定位时覆盖，二者不冲突）
   useEffect(() => {
     setActualDirection(direction)
   }, [direction])

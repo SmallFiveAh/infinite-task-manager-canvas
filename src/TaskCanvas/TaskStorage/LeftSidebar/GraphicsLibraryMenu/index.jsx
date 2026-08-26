@@ -72,7 +72,7 @@ function GraphicsLibraryMenu({ onSelectShape }) {
 
   const handleSelect = (item) => {
     setSelectedKey(item.key)
-    onSelectShape && onSelectShape(item)
+    if (onSelectShape) onSelectShape(item)
   }
 
   return (

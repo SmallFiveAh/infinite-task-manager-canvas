@@ -1,13 +1,7 @@
 /* =========================================================
    单个图形 SVG（统一使用 40x40 viewBox，stroke 黑色，无填充）
    ========================================================= */
-export const strokeProps = {
-  fill: 'none',
-  stroke: '#1f2937',
-  strokeWidth: 1.5,
-  strokeLinejoin: 'round',
-  strokeLinecap: 'round',
-}
+import { strokeProps } from './strokeProps'
 
 /* ---------- 流程图 ---------- */
 // 1. 矩形

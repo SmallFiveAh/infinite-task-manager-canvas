@@ -11,7 +11,8 @@ import {
   MINOR_MIN_SCREEN_GAP,
 } from '../constants'
 
-// 负责画布点阵网格的绘制与重绘调度（rAF 合并），与视口/交互解耦
+// 负责画布点阵网格的绘制与重绘调度（rAF 合并），与视口/交互解耦。
+// 画布上的元素（便签等）由 NotesLayer 等真实 DOM 层渲染，不在 canvas 上绘制。
 export default function useCanvasRenderer(canvasRef, containerRef, viewportRef) {
   const colorsRef = useRef({ bg: '#fafafa', dot: '#d4d7de' })
   const rafIdRef = useRef(0)

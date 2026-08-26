@@ -18,7 +18,7 @@ export default function useSelectionInteraction({ viewportRef, onSelectionEnd, o
       panLastRef.current = { x: e.clientX, y: e.clientY }
       try {
         e.currentTarget.setPointerCapture(e.pointerId)
-      } catch (err) {
+      } catch {
         /* 忽略 pointer 捕获失败 */
       }
       return
@@ -34,7 +34,7 @@ export default function useSelectionInteraction({ viewportRef, onSelectionEnd, o
     setIsSelecting(true)
     try {
       overlay.setPointerCapture(e.pointerId)
-    } catch (err) {
+    } catch {
       /* 忽略 pointer 捕获失败 */
     }
   }, [])
@@ -47,9 +47,12 @@ export default function useSelectionInteraction({ viewportRef, onSelectionEnd, o
         panLastRef.current = { x: e.clientX, y: e.clientY }
         const vp = viewportRef && viewportRef.current
         if (vp) {
+          // viewport 是跨 hook 共享的可变引用（ref），中键平移需按设计就地更新偏移量
+          // eslint-disable-next-line react/immutability
           vp.offsetX += dx
+          // eslint-disable-next-line react/immutability
           vp.offsetY += dy
-          onRedraw && onRedraw()
+          if (onRedraw) onRedraw()
         }
         return
       }
@@ -69,7 +72,7 @@ export default function useSelectionInteraction({ viewportRef, onSelectionEnd, o
         setIsPanning(false)
         try {
           e.currentTarget.releasePointerCapture(e.pointerId)
-        } catch (err) {
+        } catch {
           /* 忽略未捕获的 pointer */
         }
         return
@@ -78,7 +81,7 @@ export default function useSelectionInteraction({ viewportRef, onSelectionEnd, o
       setIsSelecting(false)
       try {
         e.currentTarget.releasePointerCapture(e.pointerId)
-      } catch (err) {
+      } catch {
         /* 忽略未捕获的 pointer */
       }
 

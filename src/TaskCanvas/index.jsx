@@ -1,12 +1,25 @@
 import React, { useCallback, useRef, useState } from 'react'
 import HoverText from 'utils/HoverText'
+import NotesLayer from './NotesLayer'
 import SelectionOverlay from './SelectionOverlay'
 import TaskStorage from './TaskStorage'
 import useCanvasRenderer from 'utils/hooks/useCanvasRenderer'
 import useCanvasViewport from 'utils/hooks/useCanvasViewport'
 import useCanvasInteractions from 'utils/hooks/useCanvasInteractions'
 import useCanvasShortcuts from 'utils/hooks/useCanvasShortcuts'
+import useStickyNoteDnD from 'utils/hooks/useStickyNoteDnD'
+import { buildRectSelection, noteColors, rectangularGroups } from './TaskStorage/LeftSidebar/NotePanel/data'
 import './index.css'
+
+// 拖放到画布时默认创建的便签：柠檬黄正方形
+const DEFAULT_NOTE_SIZE = 160
+const DEFAULT_NOTE_STYLE = buildRectSelection(rectangularGroups[0], noteColors[0])
+
+// 生成便签唯一 id
+const generateId = () =>
+  typeof crypto !== 'undefined' && crypto.randomUUID
+    ? crypto.randomUUID()
+    : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`
 
 function TaskCanvas() {
   const canvasRef = useRef(null)
@@ -16,12 +29,23 @@ function TaskCanvas() {
   // 当前激活的工具：'select' 框选任务（默认）/ 'navigate' 平移画布
   const [activeTool, setActiveTool] = useState('select')
 
-  // 渲染器：负责点阵网格绘制与 rAF 合并调度
+  // 画布上的便签列表（世界坐标 + 样式），由 NotesLayer 以真实 DOM 渲染
+  const [notes, setNotes] = useState([])
+
+  // 渲染器：负责点阵网格绘制、rAF 合并调度
   const { scheduleDraw } = useCanvasRenderer(canvasRef, containerRef, viewportRef)
+
+  // 视口快照：视口本体由 ref 承载（供交互 hook 原地更新），
+  // redrawCanvas 在每次变更后把最新值同步到 state，供 DOM 便签层纯渲染定位
+  const [viewport, setViewport] = useState({ offsetX: 0, offsetY: 0, scale: 1 })
+  const redrawCanvas = useCallback(() => {
+    scheduleDraw()
+    setViewport({ ...viewportRef.current })
+  }, [scheduleDraw])
 
   // 视口状态：暴露 scale 与缩放相关操作
   const { scale, setScale, handleResetZoom, handleZoomChangeFromMenu } =
-    useCanvasViewport({ viewportRef, canvasRef, scheduleDraw })
+    useCanvasViewport({ viewportRef, canvasRef, scheduleDraw: redrawCanvas })
 
   // 画布交互：wheel 缩放 + navigate 平移
   useCanvasInteractions({
@@ -29,7 +53,7 @@ function TaskCanvas() {
     canvasRef,
     viewportRef,
     setScale,
-    scheduleDraw,
+    scheduleDraw: redrawCanvas,
     activeTool,
   })
 
@@ -65,16 +89,53 @@ function TaskCanvas() {
     console.log('shape selected:', item)
   }, [])
 
+  // 便签拖放到画布：在落点处创建一张柠檬黄便签（以落点为中心）
+  const handleAddNote = useCallback((worldX, worldY) => {
+    setNotes((prev) => [
+      ...prev,
+      {
+        id: generateId(),
+        x: worldX - DEFAULT_NOTE_SIZE / 2,
+        y: worldY - DEFAULT_NOTE_SIZE / 2,
+        width: DEFAULT_NOTE_SIZE,
+        height: DEFAULT_NOTE_SIZE,
+        ...DEFAULT_NOTE_STYLE,
+      },
+    ])
+  }, [])
+
+  // 拖拽便签：更新便签在世界坐标中的位置
+  const handleMoveNote = useCallback((id, x, y) => {
+    setNotes((prev) => prev.map((note) => (note.id === id ? { ...note, x, y } : note)))
+  }, [])
+
+  // 按住侧边栏「便签」按钮拖入画布的拖放监听，isDragging 用于反馈样式
+  const { isDragging: isNoteDragging } = useStickyNoteDnD({
+    containerRef,
+    viewportRef,
+    onAddNote: handleAddNote,
+  })
+
   return (
-    <div className="task-canvas-container" ref={containerRef}>
-      {/* 画布组件 */}
+    <div
+      className={`task-canvas-container ${isNoteDragging ? 'is-dragging-note' : ''}`}
+      ref={containerRef}
+    >
+      {/* 画布组件（点阵网格） */}
       <canvas ref={canvasRef} className="task-canvas" />
+      {/* 便签 DOM 层：真实 DOM 元素，可悬停、拖拽 */}
+      <NotesLayer
+        notes={notes}
+        viewport={viewport}
+        activeTool={activeTool}
+        onMoveNote={handleMoveNote}
+      />
       {/* 选择覆盖层：activeTool === 'select' 时激活，左键拖拽框选；其它工具事件透传给 canvas */}
       <SelectionOverlay
         activeTool={activeTool}
         viewportRef={viewportRef}
         onSelectionEnd={handleSelectionEnd}
-        onRedraw={scheduleDraw}
+        onRedraw={redrawCanvas}
       />
       {/* HUD 组件 */}
       <HoverText text="点击恢复到 100%" className="infinite-canvas-hud-wrapper">

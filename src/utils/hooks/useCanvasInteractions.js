@@ -79,7 +79,7 @@ export default function useCanvasInteractions({
       isPanningRef.current = false
       try {
         canvas.releasePointerCapture(e.pointerId)
-      } catch (error) {
+      } catch {
         /* 忽略未捕获的 pointer */
       }
     }
