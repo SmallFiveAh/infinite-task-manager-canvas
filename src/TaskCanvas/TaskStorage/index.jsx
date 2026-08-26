@@ -12,13 +12,20 @@ function TaskStorage({
   onActiveToolChange,
   onSelectShape,
   onSelectNote,
+  stickyDragHandlers,
+  stickyDidDragRef,
 }) {
   return (
     <div className="task-storage-container">
       <div className="task-storage-navbar">
         {/* 这里存储所有导航栏组件 */}
         {/* 左侧导航栏 */}
-        <LeftSidebar onSelectShape={onSelectShape} onSelectNote={onSelectNote} />
+        <LeftSidebar
+          onSelectShape={onSelectShape}
+          onSelectNote={onSelectNote}
+          stickyDragHandlers={stickyDragHandlers}
+          stickyDidDragRef={stickyDidDragRef}
+        />
         {/* 顶部导航栏 */}
         <AboveSidebar
           zoomPercent={zoomPercent}

@@ -109,11 +109,13 @@ function TaskCanvas() {
     setNotes((prev) => prev.map((note) => (note.id === id ? { ...note, x, y } : note)))
   }, [])
 
-  // 按住侧边栏「便签」按钮拖入画布的拖放监听，isDragging 用于反馈样式
-  const { isDragging: isNoteDragging } = useStickyNoteDnD({
+  // 按住侧边栏「便签」按钮拖入画布的拖放逻辑：
+  // 拖拽全程显示跟随鼠标的虚拟便签预览，isDragging 用于反馈样式
+  const { isDragging: isNoteDragging, didDragRef, stickyDragHandlers } = useStickyNoteDnD({
     containerRef,
     viewportRef,
     onAddNote: handleAddNote,
+    noteStyle: DEFAULT_NOTE_STYLE,
   })
 
   return (
@@ -159,6 +161,8 @@ function TaskCanvas() {
         onActiveToolChange={setActiveTool}
         onSelectShape={handleSelectShape}
         onSelectNote={handleSelectNote}
+        stickyDragHandlers={stickyDragHandlers}
+        stickyDidDragRef={didDragRef}
       />
     </div>
   )

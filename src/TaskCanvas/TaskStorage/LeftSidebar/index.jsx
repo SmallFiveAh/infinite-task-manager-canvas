@@ -1,49 +1,51 @@
 import React, { useCallback, useState } from 'react'
 import HoverText from 'utils/HoverText'
-import { createNoteDragImage } from 'utils/drawNote'
 import GraphicsLibraryMenu from './GraphicsLibraryMenu'
 import NotePanel from './NotePanel'
 import ToolButton from './ToolButton'
 import { TOOLS, PANEL_TOOLS, PANEL_TOOL_BY_ID } from './tools'
-import { buildRectSelection, noteColors, rectangularGroups } from './NotePanel/data'
+
 import './index.css'
 
-// 拖放到画布时默认创建的便签样式：柠檬黄正方形
-const DEFAULT_NOTE_STYLE = buildRectSelection(rectangularGroups[0], noteColors[0])
-
-function LeftSidebar({ onSelectShape, onSelectNote }) {
+function LeftSidebar({ onSelectShape, onSelectNote, stickyDragHandlers, stickyDidDragRef }) {
   // 默认不选中任何工具；避免一打开就弹出图形库菜单
   const [activeTool, setActiveTool] = useState(null)
   // 当前打开的面板工具 ID（null 表示无面板）
   const [openPanel, setOpenPanel] = useState(null)
 
-  const handleToolClick = (toolId) => {
-    if (PANEL_TOOLS.includes(toolId)) {
-      // 点击带面板的工具：切换面板显示
-      if (activeTool === toolId && openPanel === toolId) {
-        // 已是激活状态且面板开着 → 再次点击关闭
-        setOpenPanel(null)
+  const handleToolClick = useCallback(
+    (toolId) => {
+      if (PANEL_TOOLS.includes(toolId)) {
+        // 点击带面板的工具：切换面板显示
+        if (activeTool === toolId && openPanel === toolId) {
+          // 已是激活状态且面板开着 → 再次点击关闭
+          setOpenPanel(null)
+        } else {
+          setActiveTool(toolId)
+          setOpenPanel(toolId)
+        }
       } else {
+        // 点击其它工具：切换 activeTool，并关闭所有面板
         setActiveTool(toolId)
-        setOpenPanel(toolId)
+        setOpenPanel(null)
       }
-    } else {
-      // 点击其它工具：切换 activeTool，并关闭所有面板
-      setActiveTool(toolId)
-      setOpenPanel(null)
-    }
-  }
+    },
+    [activeTool, openPanel]
+  )
 
   const paletteTool = PANEL_TOOL_BY_ID.palette
   const stickyTool = PANEL_TOOL_BY_ID.sticky
 
-  // 便签按钮拖拽开始：写入拖拽数据 + 自定义柠檬黄预览图
-  const handleStickyDragStart = useCallback((e) => {
-    e.dataTransfer.setData('application/x-canvas-note', 'sticky')
-    e.dataTransfer.effectAllowed = 'copy'
-    const preview = createNoteDragImage(DEFAULT_NOTE_STYLE)
-    e.dataTransfer.setDragImage(preview, preview.width / 2, preview.height / 2)
-  }, [])
+  // 便签按钮点击：若刚经历过拖拽（浏览器在 pointerup 后仍会触发 click），
+  // 则抑制其“打开便签面板”的副作用，只保留添加便签行为。
+  // 依赖 handleToolClick，避免持有旧闭包导致“再次点击关闭面板”失效
+  const handleStickyClick = useCallback(() => {
+    if (stickyDidDragRef && stickyDidDragRef.current) {
+      stickyDidDragRef.current = false
+      return
+    }
+    handleToolClick('sticky')
+  }, [stickyDidDragRef, handleToolClick])
 
   return (
     <>
@@ -54,9 +56,9 @@ function LeftSidebar({ onSelectShape, onSelectNote }) {
               key={tool.id}
               tool={tool}
               active={activeTool === tool.id}
-              onClick={() => handleToolClick(tool.id)}
-              draggable={tool.id === 'sticky'}
-              onDragStart={tool.id === 'sticky' ? handleStickyDragStart : undefined}
+              onClick={tool.id === 'sticky' ? handleStickyClick : () => handleToolClick(tool.id)}
+              draggable={false}
+              pointerHandlers={tool.id === 'sticky' ? stickyDragHandlers : undefined}
             />
           ))}
         </div>

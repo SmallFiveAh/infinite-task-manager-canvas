@@ -37,6 +37,21 @@
   z-index: 6;
 }
 
+/* ---------- 拖拽中的虚拟便签预览（跟随鼠标） ---------- */
+.sticky-note-drag-ghost {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 9999;
+  pointer-events: none;
+  user-select: none;
+  /* 让便签中心对准鼠标光标 */
+  transform: translate(-50%, -50%);
+  opacity: 0.92;
+  filter: drop-shadow(0 10px 18px rgba(15, 23, 42, 0.28));
+  will-change: left, top;
+}
+
 /* ---------- 缩放百分比 HUD（右下角，点击恢复到 100%） ---------- */
 /* 定位放在 HoverText 触发元素上，避免 absolute 子元素使触发 span 零尺寸 */
 .infinite-canvas-hud-wrapper {
